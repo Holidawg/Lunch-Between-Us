@@ -3,7 +3,7 @@ export type Station = {
   name: string;
 };
 
-export type Connection = {
+export type Edge = {
   from: string;
   to: string;
   weight: number;
@@ -20,7 +20,7 @@ export type ShortestPathResult = {
  */
 export function shortestPath(
   stations: readonly Station[],
-  connections: readonly Connection[],
+  connections: readonly Edge[],
   start: string,
   destination: string,
 ): ShortestPathResult | null {

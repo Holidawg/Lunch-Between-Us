@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test:shortest-path": "node --no-warnings scripts/test-shortest-path.mjs"
+    "test:shortest-path": "node --no-warnings scripts/test-shortest-path.mjs",
+    "route": "node --no-warnings scripts/route.mjs",
+    "test:mrt-network": "node --no-warnings scripts/test-mrt-network.mjs"
   },
   "dependencies": {
     "graphology": "^0.26.0",
