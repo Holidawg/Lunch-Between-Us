@@ -70,6 +70,17 @@ function StationInput({ label, value, onChange, stationOptions }: StationInputPr
             onChange(event.target.value);
             setIsOpen(true);
           }}
+          onKeyDown={(event) => {
+            const hasExactMatch = stationOptions.some(
+              (option) => option.name.toLowerCase() === search,
+            );
+
+            if (event.key === "Enter" && isOpen && matches.length > 0 && !hasExactMatch) {
+              event.preventDefault();
+              onChange(matches[0].name);
+              setIsOpen(false);
+            }
+          }}
         />
         {selectedOption && (
           <span className="input-codes" style={{ flex: "none", paddingRight: 13 }}>
@@ -192,7 +203,7 @@ export default function MeetingPointFinder() {
           />
 
           <button className="submit-button" type="submit">
-            Find best meeting point
+            Find a meeting point &amp; lunch spot
           </button>
         </form>
 
