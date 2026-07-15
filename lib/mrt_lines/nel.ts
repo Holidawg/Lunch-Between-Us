@@ -19,8 +19,13 @@ export const NEL_STATIONS = [
   { code: "NE18", name: "Punggol Coast" },
 ] as const;
 
+// Minutes between stations from SBS Transit's published Dec 2024 timetable.
+const NEL_TRAVEL_TIMES = [
+  3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 3, 2, 2, 3,
+] as const;
+
 export const NEL_EDGES = NEL_STATIONS.slice(0, -1).map((station, index) => ({
   from: station.code,
   to: NEL_STATIONS[index + 1].code,
-  weight: 3,
+  weight: NEL_TRAVEL_TIMES[index],
 }));

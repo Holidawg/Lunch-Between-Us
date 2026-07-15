@@ -36,8 +36,14 @@ export const DTL_STATIONS = [
   { code: "DT35", name: "Expo" },
 ] as const;
 
+// Minutes between stations from SBS Transit's published Feb 2025 timetable.
+const DTL_TRAVEL_TIMES = [
+  2, 1, 2, 2, 2, 2, 2, 2, 3, 2, 3, 1, 2, 2, 2, 2, 1,
+  2, 2, 1, 2, 2, 2, 3, 2, 1, 2, 2, 2, 3, 2, 2, 3, 3,
+] as const;
+
 export const DTL_EDGES = DTL_STATIONS.slice(0, -1).map((station, index) => ({
   from: station.code,
   to: DTL_STATIONS[index + 1].code,
-  weight: 3,
+  weight: DTL_TRAVEL_TIMES[index],
 }));

@@ -17,8 +17,8 @@ const result = findMeetingPoint(stations, edges, "A", "D");
 
 assert.ok(result);
 assert.equal(result.stationName, "Bravo");
-assert.equal(result.longestJourney, 2);
-assert.equal(result.combinedJourney, 3);
+assert.equal(result.longestJourney, 5);
+assert.equal(result.combinedJourney, 9);
 assert.equal(findMeetingPoint(stations, edges, "INVALID", "D"), null);
 
 console.log("PASS: meeting-point fairness and invalid-input tests");

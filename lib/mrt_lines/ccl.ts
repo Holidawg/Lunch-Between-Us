@@ -43,12 +43,23 @@ const CCL_LOOP = [
   "CC30", "CC31", "CC32", "CC33", "CC34", "CC4",
 ] as const;
 
-function connectRoute(route: readonly string[]) {
+// The completed loop does not yet publish one clean station-by-station timetable.
+// These distance-aware estimates replace the old flat three-minute value.
+const CCL_SPUR_TIMES = [2, 2, 2] as const;
+const CCL_LOOP_TIMES = [
+  2, 3, 2, 2, 2, 2, 2, 2, 3, 2, 3, 2, 2, 4, 2,
+  2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 2, 2, 2,
+] as const;
+
+function connectRoute(route: readonly string[], travelTimes: readonly number[]) {
   return route.slice(0, -1).map((from, index) => ({
     from,
     to: route[index + 1],
-    weight: 3,
+    weight: travelTimes[index],
   }));
 }
 
-export const CCL_EDGES = [...connectRoute(CCL_SPUR), ...connectRoute(CCL_LOOP)];
+export const CCL_EDGES = [
+  ...connectRoute(CCL_SPUR, CCL_SPUR_TIMES),
+  ...connectRoute(CCL_LOOP, CCL_LOOP_TIMES),
+];

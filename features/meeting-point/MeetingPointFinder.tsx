@@ -206,11 +206,11 @@ export default function MeetingPointFinder() {
             <div className="journey-times">
               <p>
                 From {firstStation}:{" "}
-                <strong>{result.firstPersonRoute.totalWeight} min</strong>
+                <strong>{Math.round(result.firstPersonRoute.totalWeight)} min</strong>
               </p>
               <p>
                 From {secondStation}:{" "}
-                <strong>{result.secondPersonRoute.totalWeight} min</strong>
+                <strong>{Math.round(result.secondPersonRoute.totalWeight)} min</strong>
               </p>
             </div>
           </section>

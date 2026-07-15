@@ -29,8 +29,14 @@ export const NSL_STATIONS = [
   { code: "NS28", name: "Marina South Pier" },
 ] as const;
 
+// Minutes between stations, derived from published SMRT train progression times.
+const NSL_TRAVEL_TIMES = [
+  3, 2, 4, 3, 5, 3, 3, 3, 3, 3, 3, 2, 5,
+  3, 3, 2, 2, 3, 2, 3, 2, 2, 3, 2, 3, 3,
+] as const;
+
 export const NSL_EDGES = NSL_STATIONS.slice(0, -1).map((station, index) => ({
   from: station.code,
   to: NSL_STATIONS[index + 1].code,
-  weight: 3,
+  weight: NSL_TRAVEL_TIMES[index],
 }));

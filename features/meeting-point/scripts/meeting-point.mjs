@@ -33,6 +33,6 @@ if (!meeting) {
 }
 
 console.log(`Best meeting point: ${meeting.stationName} (${meeting.stationCodes.join("/")})`);
-console.log(`Person 1 from ${firstStart}: ${meeting.firstPersonRoute.totalWeight} minutes`);
-console.log(`Person 2 from ${secondStart}: ${meeting.secondPersonRoute.totalWeight} minutes`);
-console.log(`Longest journey: ${meeting.longestJourney} minutes`);
+console.log(`Person 1 from ${firstStart}: ${Math.round(meeting.firstPersonRoute.totalWeight)} minutes`);
+console.log(`Person 2 from ${secondStart}: ${Math.round(meeting.secondPersonRoute.totalWeight)} minutes`);
+console.log(`Longest journey: ${Math.round(meeting.longestJourney)} minutes`);

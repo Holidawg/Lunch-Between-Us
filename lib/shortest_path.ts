@@ -7,6 +7,7 @@ export type Edge = {
   from: string;
   to: string;
   weight: number;
+  directed?: boolean;
 };
 
 export type ShortestPathResult = {
@@ -39,10 +40,12 @@ export function shortestPath(
       code: connection.to,
       weight: connection.weight,
     });
-    neighbours.get(connection.to)?.push({
-      code: connection.from,
-      weight: connection.weight,
-    });
+    if (!connection.directed) {
+      neighbours.get(connection.to)?.push({
+        code: connection.from,
+        weight: connection.weight,
+      });
+    }
   }
 
   const distances = new Map<string, number>();

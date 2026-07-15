@@ -16,6 +16,18 @@ export type MeetingPointResult = {
   combinedJourney: number;
 };
 
+// Google-style public transport estimates include some time waiting for a train.
+export const INITIAL_TRAIN_WAIT_MINUTES = 3;
+
+function includeInitialWait(route: ShortestPathResult): ShortestPathResult {
+  if (route.path.length <= 1) return route;
+
+  return {
+    ...route,
+    totalWeight: route.totalWeight + INITIAL_TRAIN_WAIT_MINUTES,
+  };
+}
+
 /**
  * Finds the fairest MRT meeting station for two starting station codes.
  * It minimises the longer journey first, then the combined journey time.
@@ -54,15 +66,18 @@ export function findMeetingPoint(
 
     if (!firstBest || !secondBest) continue;
 
+    const firstJourney = includeInitialWait(firstBest.route);
+    const secondJourney = includeInitialWait(secondBest.route);
+
     const candidate: MeetingPointResult = {
       stationName,
       stationCodes,
-      firstPersonRoute: firstBest.route,
-      secondPersonRoute: secondBest.route,
+      firstPersonRoute: firstJourney,
+      secondPersonRoute: secondJourney,
       firstPersonArrivalCode: firstBest.code,
       secondPersonArrivalCode: secondBest.code,
-      longestJourney: Math.max(firstBest.route.totalWeight, secondBest.route.totalWeight),
-      combinedJourney: firstBest.route.totalWeight + secondBest.route.totalWeight,
+      longestJourney: Math.max(firstJourney.totalWeight, secondJourney.totalWeight),
+      combinedJourney: firstJourney.totalWeight + secondJourney.totalWeight,
     };
 
     const candidateIsBetter =

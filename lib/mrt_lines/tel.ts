@@ -30,8 +30,15 @@ export const TEL_STATIONS = [
   { code: "TE29", name: "Bayshore" },
 ] as const;
 
+// Minutes between stations, calibrated from current scheduled train progression.
+// Four-minute gaps account for unopened TE10 and TE21 being passed without stopping.
+const TEL_TRAVEL_TIMES = [
+  2, 3, 3, 3, 3, 3, 3, 3, 4, 3, 2, 2, 2,
+  2, 2, 2, 2, 2, 4, 4, 3, 3, 2, 2, 3, 3,
+] as const;
+
 export const TEL_EDGES = TEL_STATIONS.slice(0, -1).map((station, index) => ({
   from: station.code,
   to: TEL_STATIONS[index + 1].code,
-  weight: 3,
+  weight: TEL_TRAVEL_TIMES[index],
 }));
