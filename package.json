@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:shortest-path": "node --no-warnings scripts/test-shortest-path.mjs"
   },
   "dependencies": {
     "graphology": "^0.26.0",
