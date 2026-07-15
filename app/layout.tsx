@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import "@/features/meeting-point/meetingPoint.css";
 
 export const metadata: Metadata = {
   title: "Lunch Between Us",

@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { findMeetingPoint } from "../features/meeting-point/findMeetingPoint.ts";
+import { findMeetingPoint } from "../findMeetingPoint.ts";
 
 const stations = [
   { code: "A", name: "Alpha" },

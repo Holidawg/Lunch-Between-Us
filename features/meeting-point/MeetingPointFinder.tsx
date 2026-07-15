@@ -11,48 +11,87 @@ type StationInputProps = {
   label: string;
   value: string;
   onChange: (value: string) => void;
-  stationNames: string[];
+  stationOptions: StationOption[];
 };
 
-function StationInput({ label, value, onChange, stationNames }: StationInputProps) {
+type StationOption = {
+  name: string;
+  codes: string[];
+  label: string;
+};
+
+function StationInput({ label, value, onChange, stationOptions }: StationInputProps) {
   const inputId = useId();
   const [isOpen, setIsOpen] = useState(false);
-  const matches = stationNames
-    .filter((name) => name.toLowerCase().includes(value.trim().toLowerCase()))
-    .slice(0, 8);
+  const search = value.trim().toLowerCase();
+  const matches = stationOptions.filter((option) =>
+    option.label.toLowerCase().includes(search),
+  );
+  const selectedOption = stationOptions.find(
+    (option) => option.name.toLowerCase() === search,
+  );
 
   return (
     <div className="station-field">
       <label htmlFor={inputId}>{label}</label>
-      <input
-        id={inputId}
-        value={value}
-        placeholder="Type an MRT station"
-        autoComplete="off"
-        role="combobox"
-        aria-expanded={isOpen && matches.length > 0}
-        aria-controls={`${inputId}-listbox`}
-        onFocus={() => setIsOpen(true)}
-        onBlur={() => setIsOpen(false)}
-        onChange={(event) => {
-          onChange(event.target.value);
-          setIsOpen(true);
+      <div
+        className="station-input-wrap"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          width: "100%",
+          height: 48,
+          border: "1px solid var(--border)",
+          borderRadius: 5,
+          background: "#fff",
         }}
-      />
+      >
+        <input
+          id={inputId}
+          value={value}
+          placeholder="Type an MRT station"
+          autoComplete="off"
+          role="combobox"
+          aria-expanded={isOpen && matches.length > 0}
+          aria-controls={`${inputId}-listbox`}
+          style={{
+            flex: 1,
+            width: "auto",
+            minWidth: 0,
+            height: "100%",
+            padding: "0 13px",
+            border: 0,
+            background: "transparent",
+            outline: "none",
+          }}
+          onFocus={() => setIsOpen(true)}
+          onBlur={() => setIsOpen(false)}
+          onChange={(event) => {
+            onChange(event.target.value);
+            setIsOpen(true);
+          }}
+        />
+        {selectedOption && (
+          <span className="input-codes" style={{ flex: "none", paddingRight: 13 }}>
+            ({selectedOption.codes.join(" / ")})
+          </span>
+        )}
+      </div>
 
       {isOpen && matches.length > 0 && (
         <ul id={`${inputId}-listbox`} className="station-list" role="listbox">
-          {matches.map((name) => (
-            <li key={name} role="option" aria-selected={name === value}>
+          {matches.map((option) => (
+            <li key={option.name} role="option" aria-selected={option.name === value}>
               <button
                 type="button"
                 onMouseDown={(event) => event.preventDefault()}
                 onClick={() => {
-                  onChange(name);
+                  onChange(option.name);
                   setIsOpen(false);
                 }}
               >
-                {name}
+                <span>{option.name}</span>
+                <span className="option-codes"> {`(${option.codes.join(" / ")})`}</span>
               </button>
             </li>
           ))}
@@ -63,10 +102,23 @@ function StationInput({ label, value, onChange, stationNames }: StationInputProp
 }
 
 export default function MeetingPointFinder() {
-  const stationNames = useMemo(
-    () => [...new Set(ALL_STATIONS.map((station) => station.name))].sort(),
-    [],
-  );
+  const stationOptions = useMemo(() => {
+    const codesByName = new Map<string, string[]>();
+
+    for (const station of ALL_STATIONS) {
+      const codes = codesByName.get(station.name) ?? [];
+      codes.push(station.code);
+      codesByName.set(station.name, codes);
+    }
+
+    return [...codesByName]
+      .map(([name, codes]) => ({
+        name,
+        codes,
+        label: `${name} (${codes.join(" / ")})`,
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }, []);
   const [firstStation, setFirstStation] = useState("");
   const [secondStation, setSecondStation] = useState("");
   const [result, setResult] = useState<MeetingPointResult | null>(null);
@@ -75,11 +127,15 @@ export default function MeetingPointFinder() {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const firstMatch = stationNames.find(
-      (name) => name.toLowerCase() === firstStation.trim().toLowerCase(),
+    const firstMatch = stationOptions.find(
+      (option) =>
+        option.label.toLowerCase() === firstStation.trim().toLowerCase() ||
+        option.name.toLowerCase() === firstStation.trim().toLowerCase(),
     );
-    const secondMatch = stationNames.find(
-      (name) => name.toLowerCase() === secondStation.trim().toLowerCase(),
+    const secondMatch = stationOptions.find(
+      (option) =>
+        option.label.toLowerCase() === secondStation.trim().toLowerCase() ||
+        option.name.toLowerCase() === secondStation.trim().toLowerCase(),
     );
 
     if (!firstMatch || !secondMatch) {
@@ -91,8 +147,8 @@ export default function MeetingPointFinder() {
     const meetingPoint = findMeetingPointByStationName(
       ALL_STATIONS,
       ALL_EDGES,
-      firstMatch,
-      secondMatch,
+      firstMatch.name,
+      secondMatch.name,
     );
 
     if (!meetingPoint) {
@@ -123,7 +179,7 @@ export default function MeetingPointFinder() {
               setFirstStation(value);
               setResult(null);
             }}
-            stationNames={stationNames}
+            stationOptions={stationOptions}
           />
           <StationInput
             label="Person two's station"
@@ -132,7 +188,7 @@ export default function MeetingPointFinder() {
               setSecondStation(value);
               setResult(null);
             }}
-            stationNames={stationNames}
+            stationOptions={stationOptions}
           />
 
           <button className="submit-button" type="submit">
@@ -149,10 +205,12 @@ export default function MeetingPointFinder() {
             <p className="station-codes">{result.stationCodes.join(" / ")}</p>
             <div className="journey-times">
               <p>
-                From {firstStation}: <strong>{result.firstPersonRoute.totalWeight} min</strong>
+                From {firstStation}:{" "}
+                <strong>{result.firstPersonRoute.totalWeight} min</strong>
               </p>
               <p>
-                From {secondStation}: <strong>{result.secondPersonRoute.totalWeight} min</strong>
+                From {secondStation}:{" "}
+                <strong>{result.secondPersonRoute.totalWeight} min</strong>
               </p>
             </div>
           </section>

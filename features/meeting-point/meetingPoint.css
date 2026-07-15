@@ -74,20 +74,39 @@ form {
   font-weight: 700;
 }
 
-.station-field input {
+.station-input-wrap {
+  display: flex;
+  align-items: center;
   width: 100%;
   height: 48px;
-  padding: 0 13px;
   border: 1px solid var(--border);
   border-radius: 5px;
   background: #fff;
+}
+
+.station-input-wrap:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgb(36 92 69 / 14%);
+}
+
+.station-field input {
+  min-width: 0;
+  height: 100%;
+  flex: 1;
+  padding: 0 13px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
   color: var(--foreground);
   outline: none;
 }
 
-.station-field input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgb(36 92 69 / 14%);
+.input-codes {
+  flex: none;
+  padding-right: 13px;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 700;
 }
 
 .station-list {
@@ -107,6 +126,10 @@ form {
 }
 
 .station-list button {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
   width: 100%;
   padding: 9px 10px;
   border: 0;
@@ -114,6 +137,13 @@ form {
   background: transparent;
   text-align: left;
   cursor: pointer;
+}
+
+.option-codes {
+  flex: none;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 700;
 }
 
 .station-list button:hover,

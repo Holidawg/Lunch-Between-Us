@@ -1,11 +1,11 @@
-import { EWL_EDGES, EWL_STATIONS } from "../lib/mrt_lines/ewl.ts";
-import { NSL_EDGES, NSL_STATIONS } from "../lib/mrt_lines/nsl.ts";
-import { NEL_EDGES, NEL_STATIONS } from "../lib/mrt_lines/nel.ts";
-import { CCL_EDGES, CCL_STATIONS } from "../lib/mrt_lines/ccl.ts";
-import { DTL_EDGES, DTL_STATIONS } from "../lib/mrt_lines/dtl.ts";
-import { TEL_EDGES, TEL_STATIONS } from "../lib/mrt_lines/tel.ts";
-import { INTERCHANGE_EDGES } from "../lib/mrt_lines/interchanges.ts";
-import { findMeetingPoint } from "../features/meeting-point/findMeetingPoint.ts";
+import { EWL_EDGES, EWL_STATIONS } from "../../../lib/mrt_lines/ewl.ts";
+import { NSL_EDGES, NSL_STATIONS } from "../../../lib/mrt_lines/nsl.ts";
+import { NEL_EDGES, NEL_STATIONS } from "../../../lib/mrt_lines/nel.ts";
+import { CCL_EDGES, CCL_STATIONS } from "../../../lib/mrt_lines/ccl.ts";
+import { DTL_EDGES, DTL_STATIONS } from "../../../lib/mrt_lines/dtl.ts";
+import { TEL_EDGES, TEL_STATIONS } from "../../../lib/mrt_lines/tel.ts";
+import { INTERCHANGE_EDGES } from "../../../lib/mrt_lines/interchanges.ts";
+import { findMeetingPoint } from "../findMeetingPoint.ts";
 
 const stations = [
   ...EWL_STATIONS, ...NSL_STATIONS, ...NEL_STATIONS,
