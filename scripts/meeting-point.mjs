@@ -5,7 +5,7 @@ import { CCL_EDGES, CCL_STATIONS } from "../lib/mrt_lines/ccl.ts";
 import { DTL_EDGES, DTL_STATIONS } from "../lib/mrt_lines/dtl.ts";
 import { TEL_EDGES, TEL_STATIONS } from "../lib/mrt_lines/tel.ts";
 import { INTERCHANGE_EDGES } from "../lib/mrt_lines/interchanges.ts";
-import { findMeetingPoint } from "../lib/meeting_point.ts";
+import { findMeetingPoint } from "../features/meeting-point/findMeetingPoint.ts";
 
 const stations = [
   ...EWL_STATIONS, ...NSL_STATIONS, ...NEL_STATIONS,

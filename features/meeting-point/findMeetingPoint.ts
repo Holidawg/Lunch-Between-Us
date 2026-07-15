@@ -1,4 +1,9 @@
-import { shortestPath, type Edge, type ShortestPathResult, type Station } from "./shortest_path.ts";
+import {
+  shortestPath,
+  type Edge,
+  type ShortestPathResult,
+  type Station,
+} from "../../lib/shortest_path.ts";
 
 export type MeetingPointResult = {
   stationName: string;
